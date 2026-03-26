@@ -3,55 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roztocze Domowe</title>
+  <title>Mikroorganizmy w Domu</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header>
-    <h1>Roztocze Domowe</h1>
-    <p>Dermatophagoides pteronyssinus &amp; Dermatophagoides farinae</p>
+    <h1>Mikroorganizmy w Domu</h1>
+    <p>Co żyje w naszych czterech ścianach?</p>
   </header>
 
   <main>
 
-    <section class="intro">
-      <h2>Czym jest roztocze domowe?</h2>
-      <p>
-        Roztocze domowe (łac. <em>Dermatophagoides</em>) to mikroskopijne pajęczaki o rozmiarach od 0,1 do 0,5 mm, niewidoczne gołym okiem. Zamieszkują nasze domy na co dzień — w materacach, poduszkach, dywanach, kanapach i pluszowych zabawkach.
-      </p>
-      <p>
-        Żywią się głównie złuszczonym naskórkiem ludzi i zwierząt domowych. W sprzyjających warunkach — przy temperaturze 20–25°C i wilgotności powietrza powyżej 50% — jedna samica może złożyć do 80 jaj w ciągu swojego życia.
-      </p>
-      <p>
-        Roztocze same w sobie są nieszkodliwe, jednak ich odchody i fragmenty ciał zawierają silne alergeny. Są jedną z najczęstszych przyczyn alergii wziewnych, astmy oskrzelowej i atopowego zapalenia skóry.
-      </p>
-    </section>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="roztocze">Roztocze domowe</button>
+      <button class="tab-btn" data-tab="grzyby">Grzyby i pleśnie</button>
+      <button class="tab-btn" data-tab="bakterie">Bakterie domowe</button>
+    </nav>
 
-    <section class="image-section">
-      <div class="placeholder-img">
-        <span class="icon">🔬</span>
-        <strong>Zdjęcie roztocza domowego</strong>
-        <span class="caption">Widok pod mikroskopem elektronowym</span>
-      </div>
-    </section>
+    <!-- ZAKŁADKA 1: Roztocze -->
+    <div class="tab-content active" id="roztocze">
 
-    <section class="facts">
-      <h2>Najważniejsze fakty</h2>
-      <ul>
-        <li>W jednym gramie kurzu domowego może przebywać nawet <strong>500 roztoczy</strong>.</li>
-        <li>Żyją od 2 do 4 miesięcy w odpowiednich warunkach.</li>
-        <li>Są jedną z głównych przyczyn całorocznego alergicznego nieżytu nosa.</li>
-        <li>Regularne pranie pościeli w temperaturze <strong>60°C</strong> skutecznie je eliminuje.</li>
-        <li>Obniżenie wilgotności powietrza poniżej 50% znacznie ogranicza ich rozmnażanie.</li>
-        <li>Odkurzacze z filtrem HEPA pomagają usuwać alergeny roztoczy z powierzchni.</li>
-      </ul>
-    </section>
+      <section class="intro">
+        <h2>Czym jest roztocze domowe?</h2>
+        <p>
+          Roztocze domowe (łac. <em>Dermatophagoides</em>) to mikroskopijne pajęczaki o rozmiarach od 0,1 do 0,5 mm, niewidoczne gołym okiem. Zamieszkują nasze domy na co dzień — w materacach, poduszkach, dywanach, kanapach i pluszowych zabawkach.
+        </p>
+        <p>
+          Żywią się głównie złuszczonym naskórkiem ludzi i zwierząt domowych. W sprzyjających warunkach — przy temperaturze 20–25°C i wilgotności powietrza powyżej 50% — jedna samica może złożyć do 80 jaj w ciągu swojego życia.
+        </p>
+        <p>
+          Roztocze same w sobie są nieszkodliwe, jednak ich odchody i fragmenty ciał zawierają silne alergeny. Są jedną z najczęstszych przyczyn alergii wziewnych, astmy oskrzelowej i atopowego zapalenia skóry.
+        </p>
+      </section>
+
+      <section class="image-section">
+        <div class="placeholder-img">
+          <span class="icon">🔬</span>
+          <strong>Zdjęcie roztocza domowego</strong>
+          <span class="caption">Widok pod mikroskopem elektronowym</span>
+        </div>
+      </section>
+
+      <section class="facts">
+        <h2>Najważniejsze fakty</h2>
+        <ul>
+          <li>W jednym gramie kurzu domowego może przebywać nawet <strong>500 roztoczy</strong>.</li>
+          <li>Żyją od 2 do 4 miesięcy w odpowiednich warunkach.</li>
+          <li>Są jedną z głównych przyczyn całorocznego alergicznego nieżytu nosa.</li>
+          <li>Regularne pranie pościeli w temperaturze <strong>60°C</strong> skutecznie je eliminuje.</li>
+          <li>Obniżenie wilgotności powietrza poniżej 50% znacznie ogranicza ich rozmnażanie.</li>
+          <li>Odkurzacze z filtrem HEPA pomagają usuwać alergeny roztoczy z powierzchni.</li>
+        </ul>
+      </section>
+
+    </div>
+
+    <!-- ZAKŁADKA 2: Grzyby i pleśnie -->
+    <div class="tab-content" id="grzyby">
+
+      <section class="intro">
+        <h2>Grzyby i pleśnie w domu</h2>
+        <p>
+          Pleśnie to mikroskopijne grzyby należące głównie do rodzajów <em>Aspergillus</em>, <em>Penicillium</em>, <em>Cladosporium</em> i <em>Stachybotrys</em>. Rozwijają się wszędzie tam, gdzie jest wilgoć — na ścianach, w łazienkach, za meblami, w uszczelkach okiennych i pod tapetami.
+        </p>
+        <p>
+          Grzyby rozmnażają się przez zarodniki unoszone w powietrzu. Wdychane mogą wywoływać reakcje alergiczne, infekcje dróg oddechowych, a w przypadku szczególnie toksycznych gatunków (jak <em>Stachybotrys chartarum</em>, zwana "czarną pleśnią") — poważne zatrucia mykotoksynami.
+        </p>
+        <p>
+          Ryzyko wzrasta w słabo wentylowanych pomieszczeniach, po zalaniach lub w domach z mostkami termicznymi, gdzie skrapla się para wodna.
+        </p>
+      </section>
+
+      <section class="image-section">
+        <div class="placeholder-img">
+          <span class="icon">🍄</span>
+          <strong>Zdjęcie pleśni domowej</strong>
+          <span class="caption">Kolonie Aspergillus pod mikroskopem</span>
+        </div>
+      </section>
+
+      <section class="facts">
+        <h2>Najważniejsze fakty</h2>
+        <ul>
+          <li>Pleśnie rosną już przy wilgotności powietrza <strong>powyżej 60%</strong>.</li>
+          <li>Jeden metr kwadratowy pleśni może uwalniać miliony zarodników dziennie.</li>
+          <li>Czarna pleśń (<em>Stachybotrys</em>) produkuje toksyny szkodliwe dla układu nerwowego.</li>
+          <li>Regularne wietrzenie pomieszczeń znacznie ogranicza rozwój grzybów.</li>
+          <li>Środki zawierające <strong>wybielacz lub alkohol</strong> skutecznie niszczą pleśń na powierzchniach.</li>
+          <li>Wilgotność w domu warto utrzymywać między <strong>40–50%</strong>.</li>
+        </ul>
+      </section>
+
+    </div>
+
+    <!-- ZAKŁADKA 3: Bakterie -->
+    <div class="tab-content" id="bakterie">
+
+      <section class="intro">
+        <h2>Bakterie domowe</h2>
+        <p>
+          Nasze domy są zamieszkane przez tysiące gatunków bakterii. Większość z nich jest całkowicie nieszkodliwa lub wręcz korzystna — stanowi naturalną mikroflorę środowiska domowego. Jednak niektóre miejsca sprzyjają namnażaniu się bakterii potencjalnie chorobotwórczych.
+        </p>
+        <p>
+          Najbardziej zanieczyszczone bakteriami miejsca w domu to kuchnia i łazienka: gąbki do zmywania, deski do krojenia, krany, klamki i ekrany telefonów. Groźne gatunki, takie jak <em>Staphylococcus aureus</em>, <em>E. coli</em> czy <em>Salmonella</em>, mogą przetrwać na powierzchniach od kilku godzin do kilku dni.
+        </p>
+        <p>
+          Mikrobiom domowy kształtuje się pod wpływem mieszkańców, zwierząt, diety i nawyków higienicznych. Badania pokazują, że domy z dziećmi i zwierzętami mają bogatszy i zdrowszy mikrobiom niż sterylnie utrzymywane mieszkania.
+        </p>
+      </section>
+
+      <section class="image-section">
+        <div class="placeholder-img">
+          <span class="icon">🦠</span>
+          <strong>Zdjęcie bakterii domowych</strong>
+          <span class="caption">Kolonie bakteryjne na płytce Petriego</span>
+        </div>
+      </section>
+
+      <section class="facts">
+        <h2>Najważniejsze fakty</h2>
+        <ul>
+          <li>Gąbka kuchenna to jedno z <strong>najbardziej zainfekowanych</strong> miejsc w domu.</li>
+          <li>Na ekranie smartfona żyje średnio <strong>10 razy więcej bakterii</strong> niż na desce klozetowej.</li>
+          <li>Regularne mycie rąk przez 20 sekund eliminuje większość bakterii chorobotwórczych.</li>
+          <li><em>Staphylococcus aureus</em> może przetrwać na suchych powierzchniach nawet <strong>kilka miesięcy</strong>.</li>
+          <li>Deski do krojenia surowego mięsa należy myć oddzielnie od pozostałych naczyń.</li>
+          <li>Temperatura powyżej <strong>70°C</strong> niszczy większość bakterii chorobotwórczych.</li>
+        </ul>
+      </section>
+
+    </div>
 
   </main>
 
   <footer>
-    <p>&copy; 2026 Strona o roztoczu domowym. Stworzona w celach edukacyjnych.</p>
+    <p>&copy; 2026 Strona o mikroorganizmach domowych. Stworzona w celach edukacyjnych.</p>
   </footer>
 
   <script src="script.js"></script>

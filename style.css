@@ -142,6 +142,43 @@ footer a:hover {
   text-decoration: underline;
 }
 
+/* Zakładki */
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background-color: #d4c4b0;
+  color: #4a3728;
+  border: none;
+  border-radius: 6px 6px 0 0;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-family: Georgia, serif;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.tab-btn:hover {
+  background-color: #c0aa90;
+}
+
+.tab-btn.active {
+  background-color: #4a3728;
+  color: #fff;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 /* Animacja pojawiania się sekcji */
 .fade-in {
   opacity: 0;
