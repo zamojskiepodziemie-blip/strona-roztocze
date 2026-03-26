@@ -173,6 +173,18 @@ musicBtn.addEventListener('click', () => {
   if (musicPlaying) { stopMusic(); } else { startMusic(); }
 });
 
+// Modal ze zdjęciem Biuro.jpg
+const modal = document.getElementById('img-modal');
+document.getElementById('download-btn').addEventListener('click', () => {
+  modal.classList.add('open');
+});
+document.getElementById('img-modal-close').addEventListener('click', () => {
+  modal.classList.remove('open');
+});
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modal.classList.remove('open');
+});
+
 // Obsługa zakładek
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
