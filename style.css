@@ -211,7 +211,7 @@ footer a:hover {
 /* Przycisk powrót na górę */
 #back-to-top {
   position: fixed;
-  bottom: 2rem;
+  bottom: 5rem;
   right: 2rem;
   background-color: #4a3728;
   color: #fff;
@@ -238,17 +238,21 @@ footer a:hover {
 #music-btn {
   position: fixed;
   bottom: 2rem;
-  left: 2rem;
-  background-color: #1a1a2e;
-  color: #a0c4ff;
-  border: 1px solid #a0c4ff;
+  right: 2rem;
+  background-color: #0d0d0d;
+  color: #ff4500;
+  border: 1px solid #ff4500;
   border-radius: 6px;
-  padding: 0.6rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-family: Georgia, serif;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #music-btn:hover {
-  background-color: #2a2a4e;
+  background-color: #1a0a00;
+  box-shadow: 0 0 18px rgba(255, 69, 0, 0.7);
 }

@@ -1,104 +1,176 @@
-// Niepokojąca muzyka w tle (Web Audio API)
+// ── Horror Ambient (Web Audio API) ──────────────────────────────────────────
 let audioCtx = null;
+let masterGain = null;
 let musicNodes = [];
+let accentTimer = null;
 let musicPlaying = false;
+
+// Proceduralny pogłos (impulse response)
+function buildReverb(ctx, duration = 2.5, decay = 3.0) {
+  const len = ctx.sampleRate * duration;
+  const buf = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+  }
+  const conv = ctx.createConvolver();
+  conv.buffer = buf;
+  return conv;
+}
 
 function startMusic() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = audioCtx;
 
-  const masterGain = audioCtx.createGain();
-  masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-  masterGain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 3);
-  masterGain.connect(audioCtx.destination);
+  masterGain = ctx.createGain();
+  masterGain.gain.setValueAtTime(0, ctx.currentTime);
+  masterGain.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 4); // fade in 4s
+  masterGain.connect(ctx.destination);
 
-  // Niski dron basowy
-  function createDrone(freq, gainVal, detune = 0) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sawtooth';
-    osc.frequency.value = freq;
-    osc.detune.value = detune;
-    gain.gain.value = gainVal;
-    osc.connect(gain);
-    gain.connect(masterGain);
-    osc.start();
-    musicNodes.push(osc);
+  const reverb = buildReverb(ctx);
+  const reverbGain = ctx.createGain();
+  reverbGain.gain.value = 0.45;
+  reverb.connect(reverbGain);
+  reverbGain.connect(masterGain);
+
+  // Łańcuch: źródło → reverb + direct
+  function connect(node) {
+    node.connect(masterGain);
+    node.connect(reverb);
   }
 
-  // Powolne, dysharmoniczne pulsowanie
-  function createPulse(freq, rate) {
-    const osc = audioCtx.createOscillator();
-    const lfo = audioCtx.createOscillator();
-    const lfoGain = audioCtx.createGain();
-    const gain = audioCtx.createGain();
+  // 1. Głęboki dron ~60 Hz z powolną modulacją
+  const drone = ctx.createOscillator();
+  const droneGain = ctx.createGain();
+  drone.type = 'sawtooth';
+  drone.frequency.value = 60;
+  droneGain.gain.value = 0.28;
+  drone.connect(droneGain);
+  connect(droneGain);
+  drone.start();
+  musicNodes.push(drone);
 
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    lfo.type = 'sine';
-    lfo.frequency.value = rate;
-    lfoGain.gain.value = 0.04;
-    gain.gain.value = 0.12;
+  // 2. Lekko rozstrojony dron — dysonans tritonu
+  const drone2 = ctx.createOscillator();
+  const drone2Gain = ctx.createGain();
+  drone2.type = 'sawtooth';
+  drone2.frequency.value = 84.5; // ~trytonowe +25 centów
+  drone2.detune.value = 18;
+  drone2Gain.gain.value = 0.14;
+  drone2.connect(drone2Gain);
+  connect(drone2Gain);
+  drone2.start();
+  musicNodes.push(drone2);
 
-    lfo.connect(lfoGain);
-    lfoGain.connect(gain.gain);
-    osc.connect(gain);
-    gain.connect(masterGain);
-    osc.start();
-    lfo.start();
-    musicNodes.push(osc, lfo);
-  }
+  // 3. Powolne pulsowanie LFO na głośności drona
+  const lfo = ctx.createOscillator();
+  const lfoGain = ctx.createGain();
+  lfo.type = 'sine';
+  lfo.frequency.value = 0.08; // ~1 puls / 12s
+  lfoGain.gain.value = 0.12;
+  lfo.connect(lfoGain);
+  lfoGain.connect(droneGain.gain);
+  lfo.start();
+  musicNodes.push(lfo);
 
-  // Szum jako tło
-  const bufferSize = audioCtx.sampleRate * 4;
-  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = noiseBuffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-  const noiseSource = audioCtx.createBufferSource();
-  noiseSource.buffer = noiseBuffer;
-  noiseSource.loop = true;
-  const noiseFilter = audioCtx.createBiquadFilter();
-  noiseFilter.type = 'lowpass';
-  noiseFilter.frequency.value = 180;
-  const noiseGain = audioCtx.createGain();
-  noiseGain.gain.value = 0.04;
-  noiseSource.connect(noiseFilter);
+  // 4. Filtrowany szum (oddech)
+  const noiseLen = ctx.sampleRate * 6;
+  const noiseBuf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+  const nd = noiseBuf.getChannelData(0);
+  for (let i = 0; i < noiseLen; i++) nd[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = noiseBuf;
+  noise.loop = true;
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = 'bandpass';
+  noiseFilter.frequency.value = 220;
+  noiseFilter.Q.value = 0.6;
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.value = 0.035;
+  noise.connect(noiseFilter);
   noiseFilter.connect(noiseGain);
-  noiseGain.connect(masterGain);
-  noiseSource.start();
-  musicNodes.push(noiseSource);
+  connect(noiseGain);
+  noise.start();
+  musicNodes.push(noise);
 
-  createDrone(55, 0.3);       // A1 — głęboki bas
-  createDrone(58.3, 0.15, 8); // Bb1 lekko rozstrojony — dysonans
-  createDrone(82.4, 0.1);     // E2
-  createPulse(110, 0.07);     // A2 pulsujące
-  createPulse(146.8, 0.04);   // D3 powolne pulsowanie
+  // 5. Losowe "creepy" akcenty co 4–9 sekund
+  function scheduleAccent() {
+    if (!musicPlaying) return;
+    const delay = 4000 + Math.random() * 5000;
+    accentTimer = setTimeout(() => {
+      if (!musicPlaying || !audioCtx) return;
+      triggerAccent();
+      scheduleAccent();
+    }, delay);
+  }
 
+  function triggerAccent() {
+    const ctx2 = audioCtx;
+    if (!ctx2) return;
+    const type = Math.random();
+
+    if (type < 0.5) {
+      // Wysoki dysonansowy ton z opadającą obwiednią
+      const acc = ctx2.createOscillator();
+      const accGain = ctx2.createGain();
+      acc.type = 'sine';
+      acc.frequency.value = 900 + Math.random() * 600;
+      accGain.gain.setValueAtTime(0, ctx2.currentTime);
+      accGain.gain.linearRampToValueAtTime(0.08, ctx2.currentTime + 0.05);
+      accGain.gain.exponentialRampToValueAtTime(0.0001, ctx2.currentTime + 2.5);
+      acc.connect(accGain);
+      accGain.connect(reverb);
+      acc.start();
+      acc.stop(ctx2.currentTime + 2.6);
+    } else {
+      // Krótki niski "uderzenie"
+      const acc = ctx2.createOscillator();
+      const accGain = ctx2.createGain();
+      acc.type = 'sine';
+      acc.frequency.setValueAtTime(120, ctx2.currentTime);
+      acc.frequency.exponentialRampToValueAtTime(30, ctx2.currentTime + 0.8);
+      accGain.gain.setValueAtTime(0.18, ctx2.currentTime);
+      accGain.gain.exponentialRampToValueAtTime(0.0001, ctx2.currentTime + 0.9);
+      acc.connect(accGain);
+      accGain.connect(reverb);
+      acc.start();
+      acc.stop(ctx2.currentTime + 1);
+    }
+  }
+
+  scheduleAccent();
   musicPlaying = true;
-  musicBtn.textContent = '🔇 Wyłącz dźwięk';
+  musicBtn.innerHTML = '⏸ Pauza';
 }
 
 function stopMusic() {
-  if (audioCtx) {
-    musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
-    musicNodes = [];
-    audioCtx.close();
-    audioCtx = null;
+  if (accentTimer) { clearTimeout(accentTimer); accentTimer = null; }
+
+  if (masterGain && audioCtx) {
+    const t = audioCtx.currentTime;
+    masterGain.gain.setValueAtTime(masterGain.gain.value, t);
+    masterGain.gain.linearRampToValueAtTime(0, t + 2); // fade out 2s
+    setTimeout(() => {
+      musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
+      musicNodes = [];
+      if (audioCtx) { audioCtx.close(); audioCtx = null; }
+      masterGain = null;
+    }, 2100);
   }
+
   musicPlaying = false;
-  musicBtn.textContent = '🔊 Włącz dźwięk';
+  musicBtn.innerHTML = '🔊 Play';
 }
 
 const musicBtn = document.createElement('button');
-musicBtn.textContent = '🔊 Włącz dźwięk';
+musicBtn.innerHTML = '🔊 Play';
 musicBtn.id = 'music-btn';
 document.body.appendChild(musicBtn);
 
 musicBtn.addEventListener('click', () => {
-  if (musicPlaying) {
-    stopMusic();
-  } else {
-    startMusic();
-  }
+  if (musicPlaying) { stopMusic(); } else { startMusic(); }
 });
 
 // Obsługa zakładek
