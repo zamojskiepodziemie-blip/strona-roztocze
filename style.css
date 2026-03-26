@@ -12,7 +12,7 @@ body {
 }
 
 header {
-  background-color: #4a3728;
+  background: linear-gradient(135deg, #2e7d32, #f9a825);
   color: #fff;
   text-align: center;
   padding: 2.5rem 1rem;
